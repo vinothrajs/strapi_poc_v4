@@ -1,5 +1,5 @@
 ## To run DB
-cd database
+cd db
 docker-compose up -d
 
 ## dev db 
@@ -13,7 +13,7 @@ admin@test.com
 Admin@123!
 
 ## To run backend api
-cd backend 
+cd backend
 npm install
 npm run develop
 http://localhost:1337/admin
