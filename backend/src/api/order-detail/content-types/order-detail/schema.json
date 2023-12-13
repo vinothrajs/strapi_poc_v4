@@ -1,0 +1,54 @@
+{
+  "kind": "collectionType",
+  "collectionName": "order_details",
+  "info": {
+    "singularName": "order-detail",
+    "pluralName": "order-details",
+    "displayName": "orderDetail",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "orderlinenumber": {
+      "type": "biginteger"
+    },
+    "orderquantity": {
+      "type": "biginteger"
+    },
+    "unitprice": {
+      "type": "float"
+    },
+    "duedate": {
+      "type": "date"
+    },
+    "extendedamount": {
+      "type": "float"
+    },
+    "taxamount": {
+      "type": "biginteger"
+    },
+    "linetotalamount": {
+      "type": "biginteger"
+    },
+    "discountpercentage": {
+      "type": "biginteger"
+    },
+    "discountamount": {
+      "type": "biginteger"
+    },
+    "item": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::item.item"
+    },
+    "order_header": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::order-header.order-header",
+      "inversedBy": "order_details"
+    }
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "kind": "collectionType",
+  "collectionName": "order_headers",
+  "info": {
+    "singularName": "order-header",
+    "pluralName": "order-headers",
+    "displayName": "orderHeader",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "orderdate": {
+      "type": "date"
+    },
+    "orderduedate": {
+      "type": "date"
+    },
+    "subtotal": {
+      "type": "biginteger"
+    },
+    "discount": {
+      "type": "biginteger"
+    },
+    "tax": {
+      "type": "biginteger"
+    },
+    "shipping": {
+      "type": "biginteger"
+    },
+    "ordertotal": {
+      "type": "biginteger"
+    },
+    "advancepaid": {
+      "type": "biginteger"
+    },
+    "balancedue": {
+      "type": "biginteger"
+    },
+    "orderno": {
+      "type": "string"
+    },
+    "customer": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::customer.customer"
+    },
+    "order": {
+      "type": "string"
+    },
+    "order_details": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::order-detail.order-detail",
+      "mappedBy": "order_header"
+    }
+  }
+}

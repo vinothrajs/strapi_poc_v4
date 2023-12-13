@@ -362,104 +362,6 @@ export interface AdminTransferTokenPermission extends Schema.CollectionType {
   };
 }
 
-export interface ApiEmployeeEmployee extends Schema.CollectionType {
-  collectionName: 'employees';
-  info: {
-    singularName: 'employee';
-    pluralName: 'employees';
-    displayName: 'Employee';
-    description: '';
-  };
-  options: {
-    draftAndPublish: false;
-  };
-  pluginOptions: {
-    i18n: {
-      localized: true;
-    };
-  };
-  attributes: {
-    name: Attribute.String &
-      Attribute.Required &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }> &
-      Attribute.SetMinMaxLength<{
-        minLength: 3;
-        maxLength: 100;
-      }>;
-    age: Attribute.Integer &
-      Attribute.Required &
-      Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
-    skills: Attribute.Relation<
-      'api::employee.employee',
-      'oneToMany',
-      'api::skill.skill'
-    >;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::employee.employee',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::employee.employee',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    localizations: Attribute.Relation<
-      'api::employee.employee',
-      'oneToMany',
-      'api::employee.employee'
-    >;
-    locale: Attribute.String;
-  };
-}
-
-export interface ApiSkillSkill extends Schema.CollectionType {
-  collectionName: 'skills';
-  info: {
-    singularName: 'skill';
-    pluralName: 'skills';
-    displayName: 'Skill';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    name: Attribute.String & Attribute.Required;
-    employee: Attribute.Relation<
-      'api::skill.skill',
-      'manyToOne',
-      'api::employee.employee'
-    >;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::skill.skill',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::skill.skill',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
 export interface PluginUploadFile extends Schema.CollectionType {
   collectionName: 'files';
   info: {
@@ -775,6 +677,300 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
   };
 }
 
+export interface ApiArticleArticle extends Schema.CollectionType {
+  collectionName: 'articles';
+  info: {
+    singularName: 'article';
+    pluralName: 'articles';
+    displayName: 'Article';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    name: Attribute.String;
+    type: Attribute.String;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::article.article',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::article.article',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiCustomerCustomer extends Schema.CollectionType {
+  collectionName: 'customers';
+  info: {
+    singularName: 'customer';
+    pluralName: 'customers';
+    displayName: 'customer';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    customerno: Attribute.String;
+    customername: Attribute.String;
+    customertype: Attribute.Enumeration<['wholesaler', 'retailer']>;
+    Address: Attribute.String;
+    city: Attribute.String;
+    state: Attribute.String;
+    zip: Attribute.String;
+    country: Attribute.String;
+    ytdsales: Attribute.String;
+    totalsales: Attribute.String;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::customer.customer',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::customer.customer',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiEmployeeEmployee extends Schema.CollectionType {
+  collectionName: 'employees';
+  info: {
+    singularName: 'employee';
+    pluralName: 'employees';
+    displayName: 'Employee';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  pluginOptions: {
+    i18n: {
+      localized: true;
+    };
+  };
+  attributes: {
+    name: Attribute.String &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }> &
+      Attribute.SetMinMaxLength<{
+        minLength: 3;
+        maxLength: 100;
+      }>;
+    age: Attribute.Integer &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    skills: Attribute.Relation<
+      'api::employee.employee',
+      'oneToMany',
+      'api::skill.skill'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::employee.employee',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::employee.employee',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    localizations: Attribute.Relation<
+      'api::employee.employee',
+      'oneToMany',
+      'api::employee.employee'
+    >;
+    locale: Attribute.String;
+  };
+}
+
+export interface ApiItemItem extends Schema.CollectionType {
+  collectionName: 'items';
+  info: {
+    singularName: 'item';
+    pluralName: 'items';
+    displayName: 'item';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    itemno: Attribute.String;
+    alternateitemno: Attribute.String;
+    itemdescription: Attribute.String;
+    notes: Attribute.String;
+    listprice: Attribute.BigInteger;
+    image: Attribute.Media;
+    taxcode: Attribute.Enumeration<['product', 'service', 'digital']>;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<'api::item.item', 'oneToOne', 'admin::user'> &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<'api::item.item', 'oneToOne', 'admin::user'> &
+      Attribute.Private;
+  };
+}
+
+export interface ApiOrderDetailOrderDetail extends Schema.CollectionType {
+  collectionName: 'order_details';
+  info: {
+    singularName: 'order-detail';
+    pluralName: 'order-details';
+    displayName: 'orderDetail';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    orderlinenumber: Attribute.BigInteger;
+    orderquantity: Attribute.BigInteger;
+    unitprice: Attribute.Float;
+    duedate: Attribute.Date;
+    extendedamount: Attribute.Float;
+    taxamount: Attribute.BigInteger;
+    linetotalamount: Attribute.BigInteger;
+    discountpercentage: Attribute.BigInteger;
+    discountamount: Attribute.BigInteger;
+    item: Attribute.Relation<
+      'api::order-detail.order-detail',
+      'oneToOne',
+      'api::item.item'
+    >;
+    order_header: Attribute.Relation<
+      'api::order-detail.order-detail',
+      'manyToOne',
+      'api::order-header.order-header'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::order-detail.order-detail',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::order-detail.order-detail',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiOrderHeaderOrderHeader extends Schema.CollectionType {
+  collectionName: 'order_headers';
+  info: {
+    singularName: 'order-header';
+    pluralName: 'order-headers';
+    displayName: 'orderHeader';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    orderdate: Attribute.Date;
+    orderduedate: Attribute.Date;
+    subtotal: Attribute.BigInteger;
+    discount: Attribute.BigInteger;
+    tax: Attribute.BigInteger;
+    shipping: Attribute.BigInteger;
+    ordertotal: Attribute.BigInteger;
+    advancepaid: Attribute.BigInteger;
+    balancedue: Attribute.BigInteger;
+    orderno: Attribute.String;
+    customer: Attribute.Relation<
+      'api::order-header.order-header',
+      'oneToOne',
+      'api::customer.customer'
+    >;
+    order: Attribute.String;
+    order_details: Attribute.Relation<
+      'api::order-header.order-header',
+      'oneToMany',
+      'api::order-detail.order-detail'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::order-header.order-header',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::order-header.order-header',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiSkillSkill extends Schema.CollectionType {
+  collectionName: 'skills';
+  info: {
+    singularName: 'skill';
+    pluralName: 'skills';
+    displayName: 'Skill';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    name: Attribute.String & Attribute.Required;
+    employee: Attribute.Relation<
+      'api::skill.skill',
+      'manyToOne',
+      'api::employee.employee'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::skill.skill',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::skill.skill',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 declare module '@strapi/types' {
   export module Shared {
     export interface ContentTypes {
@@ -785,14 +981,19 @@ declare module '@strapi/types' {
       'admin::api-token-permission': AdminApiTokenPermission;
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
-      'api::employee.employee': ApiEmployeeEmployee;
-      'api::skill.skill': ApiSkillSkill;
       'plugin::upload.file': PluginUploadFile;
       'plugin::upload.folder': PluginUploadFolder;
       'plugin::i18n.locale': PluginI18NLocale;
       'plugin::users-permissions.permission': PluginUsersPermissionsPermission;
       'plugin::users-permissions.role': PluginUsersPermissionsRole;
       'plugin::users-permissions.user': PluginUsersPermissionsUser;
+      'api::article.article': ApiArticleArticle;
+      'api::customer.customer': ApiCustomerCustomer;
+      'api::employee.employee': ApiEmployeeEmployee;
+      'api::item.item': ApiItemItem;
+      'api::order-detail.order-detail': ApiOrderDetailOrderDetail;
+      'api::order-header.order-header': ApiOrderHeaderOrderHeader;
+      'api::skill.skill': ApiSkillSkill;
     }
   }
 }

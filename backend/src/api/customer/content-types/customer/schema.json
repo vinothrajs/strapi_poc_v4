@@ -1,0 +1,50 @@
+{
+  "kind": "collectionType",
+  "collectionName": "customers",
+  "info": {
+    "singularName": "customer",
+    "pluralName": "customers",
+    "displayName": "customer",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "customerno": {
+      "type": "string"
+    },
+    "customername": {
+      "type": "string"
+    },
+    "customertype": {
+      "type": "enumeration",
+      "enum": [
+        "wholesaler",
+        "retailer"
+      ]
+    },
+    "Address": {
+      "type": "string"
+    },
+    "city": {
+      "type": "string"
+    },
+    "state": {
+      "type": "string"
+    },
+    "zip": {
+      "type": "string"
+    },
+    "country": {
+      "type": "string"
+    },
+    "ytdsales": {
+      "type": "string"
+    },
+    "totalsales": {
+      "type": "string"
+    }
+  }
+}
