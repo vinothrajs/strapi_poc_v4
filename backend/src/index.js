@@ -17,7 +17,7 @@ module.exports = {
     })
 
     if(customerentries.length == 0){
-    for(let i=1;i<51;i++){
+    for(let i=1;i<101;i++){
       await strapi.entityService.create("api::customer.customer",{
          data:{
           customerno: `Customer ${i}`,
@@ -40,7 +40,7 @@ module.exports = {
     })
 
     if(itementries.length == 0 ){
-      for(let i=1;i<51;i++){
+      for(let i=1;i<101;i++){
         await strapi.entityService.create("api::item.item",{
         data:{
           itemno:`Item ${i}`,
@@ -58,7 +58,7 @@ module.exports = {
     })
 
     if(orderheaderentries == 0){
-      for(let i=1;i<51;i++){
+      for(let i=1;i<101;i++){
         await strapi.entityService.create('api::order-header.order-header',{
          data:{
                         orderdate: "2023-11-24",
@@ -71,12 +71,12 @@ module.exports = {
                         advancepaid: faker.number.int(),
                         balancedue: faker.number.int(),
                         orderno: `orderno${i}`,
-                        customer: faker.number.int({min:1,max:50})
+                        customer: faker.number.int({min:1,max:100})
 
             }
         })
 
-        for(let j=0;j<10;j++){
+        for(let j=1;j<501;j++){
           await strapi.entityService.create('api::order-detail.order-detail',{
             data:{
                            orderlinenumber:i,
@@ -88,7 +88,7 @@ module.exports = {
                            linetotalamount:faker.number.int(),
                            discountpercentage: faker.number.int(),
                            discountamount: faker.number.int(),
-                           item:faker.number.int({min:1,max:50}),
+                           item:faker.number.int({min:1,max:100}),
                            order_header: i
 
                }
