@@ -1,10 +1,10 @@
 import http from 'k6/http';
 import { check,sleep,fail } from 'k6';
 import { Rate } from 'k6/metrics';
-export const options = {
-  vus: 10,
-  duration: '30s',
-};
+// export const options = {
+//   vus: 1,
+//   duration: '30s',
+// };
 
 export const errorRate = new Rate('errors')
 export default function () {
@@ -36,7 +36,12 @@ export default function () {
     )
 
     const res = http.post(url,payload,params);
-    // console.log("res:",res.status);   
+    //  console.log("res:",res.body);
+     let order_headers = res.body 
+    //  console.log(typeof(order_headers)); 
+     let obj = JSON.parse(order_headers)
+     const idValue = obj.data.id;
+     console.log(idValue); 
     check(res,{
       'status is 200':(r) => r.status === 200,
       
@@ -65,12 +70,12 @@ export default function () {
             discountpercentage: 23,
             discountamount:32,
             item:55,
-            order_header: 1001
+            order_header: idValue
         }
        })
 
        const res = http.post(url,payload,params);
-    //    console.log("res:",res.status);   
+    //  console.log("res:",res);   
      const checkoutput =  check(res,{
          'status is 200':(r) => r.status === 200,
          
