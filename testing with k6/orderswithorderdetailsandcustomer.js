@@ -8,6 +8,7 @@ import { Rate } from 'k6/metrics';
 
 export const errorRate = new Rate('errors')
 export default function () {
+  try{
     const url = 'http://localhost:1337/api/order-headers?populate[0]=order_details&populate[1]=customer'
     const params  = {
       headers: {
@@ -23,5 +24,8 @@ export default function () {
     }) || errorRate.add(1)
 
     sleep(1)
+  }catch(error){
+    console.error(`An error occurred:${error.message}`);
+  }
    
 }

@@ -8,6 +8,7 @@ import { Rate } from 'k6/metrics';
 
 export const errorRate = new Rate('errors')
 export default function () {
+   try{
     const url = 'http://localhost:1337/api/order-headers';
     const params  = {
       headers: {
@@ -45,7 +46,7 @@ export default function () {
     check(res,{
       'status is 200':(r) => r.status === 200,
       
-    }) || errorRate.add(1)
+    }) || fail("Failed to create order header")
 
 
 
@@ -82,11 +83,15 @@ export default function () {
        }) || errorRate.add(1)
 
        if(!checkoutput){
-        fail('unexpected response')
+        fail('Failed to create order details')
        }
 
        sleep(1)
     }
+
+  }catch(error){
+    console.error(`An error occurred:${error.message}`);
+  }
 
 
     

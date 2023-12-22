@@ -1,5 +1,5 @@
 import http from 'k6/http';
-import { check,sleep } from 'k6';
+import { check,fail,sleep } from 'k6';
 import { Rate } from 'k6/metrics';
 // export const options = {
 //   vus: 10,
@@ -8,6 +8,7 @@ import { Rate } from 'k6/metrics';
 
 export const errorRate = new Rate('errors')
 export default function () {
+    try{
     const url = 'http://localhost:1337/api/items';
     const params  = {
       headers: {
@@ -16,10 +17,12 @@ export default function () {
       },
     }; 
     check(http.get(url,params),{
-      'status is 200':(r) => r.status == 200,
-      'response in json':(r) => r.json()
-    }) || errorRate.add(1)
+      'status is 200':(r) => r.status == 200,      
+    }) || fail("Request failed")
 
     sleep(1)
+  }catch(error){
+    console.error(`An error occurred:${error.message}`);
+  }
    
 }

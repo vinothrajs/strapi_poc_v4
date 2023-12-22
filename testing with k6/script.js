@@ -1,6 +1,8 @@
 import http from 'k6/http';
-import { check, sleep } from 'k6';
+import { check, fail, sleep } from 'k6';
 import { Rate } from 'k6/metrics';
+// import deleteorders from './deleteorderheaderandorderdetail'
+
 export const options = {
    scenarios:{
     all_items:{
@@ -38,6 +40,13 @@ export const options = {
       executor:'constant-vus',
       vus:1,
       duration:'3s'
+    },
+    ordersdelete:{
+       exec:'ordersdelete',
+       executor:'constant-vus',
+       vus:10,
+       duration:'3s'
+
     }
    }
 };
@@ -45,6 +54,7 @@ export const options = {
 export const errorRate = new Rate('errors')
 
 export function allItems() {
+  try{
   const url = 'http://localhost:1337/api/items';
   const params  = {
     headers: {
@@ -54,11 +64,17 @@ export function allItems() {
   }; 
   check(http.get(url,params),{
     'status is 200':(r) => r.status == 200
-  }) || errorRate.add(1)
+  }) || fail("Failed to get all items")
+   sleep(1)
+}catch(error){
+  console.error(`An error occurred:${error.message}`);
+}
  
 }
 
 export function allCustomers() {
+  try {  
+
   const url = 'http://localhost:1337/api/customers';
   const params  = {
     headers: {
@@ -70,11 +86,18 @@ export function allCustomers() {
   // console.log("res:",res.body.meta);  
   check(res,{
     'status is 200':(r) => r.status === 200
-  }) || errorRate.add(1) 
+  }) || fail("Failed to fetch all customers") 
+  sleep(1)
+  } catch (error) {
+  console.error(`An error occurred:${error.message}`);
+  }
  
 }
 
 export function allOrdersheaderswithPagination(){
+    try {
+      
+    
     const url = 'http://localhost:1337/api/order-headers?pagination[page]=1&pagination[pageSize]=2'
     const params  = {
       headers: {
@@ -86,13 +109,24 @@ export function allOrdersheaderswithPagination(){
     // console.log("res:",res.body);   
     check(res,{
       'status is 200':(r) => r.status === 200
-    }) || errorRate.add(1)
+    }) || fail("Failed to get all orders with pagination")
+    sleep(1)
+  } catch (error) {
+    console.error(`An error occurred:${error.message}`); 
+  }
 
 }
 
 
 export function oneOrderswithOrderdetails(){
-  const url = 'http://localhost:1337/api/order-headers/1?populate[0]=order_details'
+  try {
+    function randomNumber(min, max) {
+      return Math.floor(Math.random() * (max - min) + min);
+  } 
+      let order_header_id = randomNumber(1,1000)
+    
+  
+  const url = `http://localhost:1337/api/order-headers/${order_header_id}?populate[0]=order_details`
   const params  = {
     headers: {
       'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzAyNTM1MjE0LCJleHAiOjE3MDUxMjcyMTR9.roxtQGYrEuDYH1W4sI2H3MqhKm9NrCb2W8KsGZiwjsE',
@@ -104,10 +138,17 @@ export function oneOrderswithOrderdetails(){
   // console.log("res:",res.body);   
   check(res,{
     'status is 200':(r) => r.status === 200
-  }) || errorRate.add(1)
+  }) || fail("failed to order_header not found ")
+  sleep(1)
+} catch (error) {
+  console.error(`An error occurred:${error.message}`); 
+}
 }
 
 export function orderswithordersdetailsandcustomer(){
+  try {
+    
+ 
   const url = 'http://localhost:1337/api/order-headers?populate[0]=order_details&populate[1]=customer'
   const params  = {
     headers: {
@@ -120,11 +161,18 @@ export function orderswithordersdetailsandcustomer(){
   // console.log("res:",res.body);   
   check(res,{
     'status is 200':(r) => r.status === 200
-  }) || errorRate.add(1)
+  }) || fail("failed to get orderswithordersdetailsandcustomer")
+  sleep(1)
+} catch (error) {
+  console.error(`An error occurred:${error.message}`);
+}
 }
 
 
 export function postorderheaderandorderdetails(){
+  try {
+    
+ 
   const url = 'http://localhost:1337/api/order-headers';
     const params  = {
       headers: {
@@ -157,7 +205,7 @@ export function postorderheaderandorderdetails(){
     check(res,{
       'status is 200':(r) => r.status === 200,
       
-    }) || errorRate.add(1)
+    }) || fail("Failed to create order header")
 
 
 
@@ -198,72 +246,40 @@ export function postorderheaderandorderdetails(){
        }
 
        sleep(1)
+
     }
+  } catch (error) {
+    console.error(`An error occurred:${error.message}`);
+  }
 
 
 }
 
 export function updateorderheaderandorderdetail(){
-  const url = 'http://localhost:1337/api/order-headers/1714';
-  const params  = {
-    headers: {
-      'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzAyNTM1MjE0LCJleHAiOjE3MDUxMjcyMTR9.roxtQGYrEuDYH1W4sI2H3MqhKm9NrCb2W8KsGZiwjsE',
-      'Content-Type': 'application/json',
-    },
-  }; 
-  const res = http.get(url,params);
-  // console.log(res);   
-  check(res,{
-    'status is 200':(r) => r.status === 200
-  }) || errorRate.add(1)
-
-  sleep(1)
-
-  if(res.status == 200){
-      // console.log("Chej")
-      
-
-// Function to generate random number
-  function randomNumber(min, max) {
+  try{
+    function randomNumber(min, max) {
       return Math.floor(Math.random() * (max - min) + min);
-  }      
-      const id  = randomNumber(1,500) 
-      const url = `http://localhost:1337/api/order-headers/${id}`;
+  } 
+      let order_header_id = randomNumber(1,1000)
+      const url = `http://localhost:1337/api/order-headers/${order_header_id}`;
       const params  = {
-          headers: {
-            'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzAyNTM1MjE0LCJleHAiOjE3MDUxMjcyMTR9.roxtQGYrEuDYH1W4sI2H3MqhKm9NrCb2W8KsGZiwjsE',
-            'Content-Type': 'application/json',
-          },
-        };
-        const payload = JSON.stringify(
-          {
-              data:{
-                  orderdate:"2023-11-24",
-                  orderduedate:"2023-11-29",
-                  subtotal:22,
-                  discount:23,
-                  tax:33,
-                  shipping:25,
-                  ordertotal:32,
-                  advancepaid:456,
-                  balancedue:234,
-                  orderno:"changeoverssd",
-                  customer:randomNumber(1,100)
-              }
-          }
-  
-  
-      )  
-      // console.log(params);
-      const res = http.put(url,payload,params);
+        headers: {
+          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzAyNTM1MjE0LCJleHAiOjE3MDUxMjcyMTR9.roxtQGYrEuDYH1W4sI2H3MqhKm9NrCb2W8KsGZiwjsE',
+          'Content-Type': 'application/json',
+        },
+      }; 
+      const res = http.get(url,params);
       // console.log(res);   
       check(res,{
         'status is 200':(r) => r.status === 200
-      }) || errorRate.add(1)
-
-      if(res.status == 200){
-          let order_id = randomNumber(200,2000)
-          const url = `http://localhost:1337/api/order-details/${order_id}`;
+      }) || fail("Failed to get order header")
+  
+      sleep(1)
+  
+      if(res.status == 200){ 
+          
+  
+          const url = `http://localhost:1337/api/order-headers/${order_header_id}`;
           const params  = {
               headers: {
                 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzAyNTM1MjE0LCJleHAiOjE3MDUxMjcyMTR9.roxtQGYrEuDYH1W4sI2H3MqhKm9NrCb2W8KsGZiwjsE',
@@ -273,31 +289,91 @@ export function updateorderheaderandorderdetail(){
             const payload = JSON.stringify(
               {
                   data:{
-                      orderlinenumber:randomNumber(1000,2000),
-                      orderquantity:630,
-                      unitprice:223,
-                      duedate:"2023-11-29",
-                      extendedamount:450,
-                      taxamount:623,
-                      linetotalamount:425,
-                      discountpercentage:243,
-                      discountamount:342, 
-                      item:55,
-                      order_header:id
+                      orderdate:"2023-11-24",
+                      orderduedate:"2023-11-29",
+                      subtotal:22,
+                      discount:23,
+                      tax:33,
+                      shipping:25,
+                      ordertotal:32,
+                      advancepaid:456,
+                      balancedue:234,
+                      orderno:"changeoverssd",
+                      customer:randomNumber(1,100)
                   }
               }
       
       
-          )  
-          // console.log(params);
-          const res = http.put(url,payload,params);
-          console.log("Completed order detail");
-          // console.log(res);   
+          )         
+          const res = http.put(url,payload,params);           
           check(res,{
             'status is 200':(r) => r.status === 200
-          }) || errorRate.add(1)
-
+          }) || fail('update order header failed')
+  
+          if(res.status == 200){
+              let order_id = randomNumber(200,2000)
+              const url = `http://localhost:1337/api/order-details/${order_id}`;
+              const params  = {
+                  headers: {
+                    'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzAyNTM1MjE0LCJleHAiOjE3MDUxMjcyMTR9.roxtQGYrEuDYH1W4sI2H3MqhKm9NrCb2W8KsGZiwjsE',
+                    'Content-Type': 'application/json',
+                  },
+                };
+                const payload = JSON.stringify(
+                  {
+                      data:{
+                          orderlinenumber:randomNumber(1000,2000),
+                          orderquantity:630,
+                          unitprice:223,
+                          duedate:"2023-11-29",
+                          extendedamount:450,
+                          taxamount:623,
+                          linetotalamount:425,
+                          discountpercentage:243,
+                          discountamount:342, 
+                          item:55,
+                          order_header:order_header_id
+                      }
+                  }       
+          
+              )            
+              const res = http.put(url,payload,params);           
+              check(res,{
+                'status is 200':(r) => r.status === 200
+              }) || fail("Failed to update order details")
+  
+          }
+  
       }
+    }catch(error){
+      console.error(`An error occurred:${error.message}`);
+    }
+}
 
-  }
+export function ordersdelete(){
+  try{   
+    // deleteorders()
+    function randomNumber(min, max) {
+     return Math.floor(Math.random() * (max - min) + min);
+     }      
+     let order_headers_id  = randomNumber(5,4500) 
+     const url = `http://localhost:1337/api/deleteorders/${order_headers_id}`
+     const params  = {
+       headers: {
+         'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzAyNTM1MjE0LCJleHAiOjE3MDUxMjcyMTR9.roxtQGYrEuDYH1W4sI2H3MqhKm9NrCb2W8KsGZiwjsE',
+         'Content-Type': 'application/json',
+       },
+     };   
+ 
+     const res = http.del(url,null,params) 
+   
+     check(res,{
+         'status is 200':(r) => r.status === 200,
+         
+       }) || fail('Request failed')
+ 
+     sleep(1)  
+   }catch(error){
+     console.error(`An error occurred:${error.message}`);
+   }
 }

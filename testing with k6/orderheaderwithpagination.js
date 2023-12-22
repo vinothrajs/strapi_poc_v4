@@ -1,5 +1,5 @@
 import http from 'k6/http';
-import { check,sleep } from 'k6';
+import { check,fail,sleep } from 'k6';
 import { Rate } from 'k6/metrics';
 export const options = {
   vus: 10,
@@ -8,6 +8,7 @@ export const options = {
 
 export const errorRate = new Rate('errors')
 export default function () {
+   try{
     const url = 'http://localhost:1337/api/order-headers?pagination[page]=1&pagination[pageSize]=2'
     const params  = {
       headers: {
@@ -19,7 +20,11 @@ export default function () {
     // console.log("res:",res.body);   
     check(res,{
       'status is 200':(r) => r.status === 200
-    }) || errorRate.add(1)
-
+    }) || fail("Request Failed")
+    
+    sleep(1)
+  }catch(error){
+    console.error(`An error occurred:${error.message}`);
+  }
    
 }

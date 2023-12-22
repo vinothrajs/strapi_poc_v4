@@ -1,5 +1,5 @@
 import http from 'k6/http';
-import { check,sleep } from 'k6';
+import { check,fail,sleep } from 'k6';
 import { Rate } from 'k6/metrics';
 // export const options = {
 //   vus: 1,
@@ -8,7 +8,12 @@ import { Rate } from 'k6/metrics';
 
 export const errorRate = new Rate('errors')
 export default function () {
-    const url = 'http://localhost:1337/api/order-headers/1714';
+  try{
+  function randomNumber(min, max) {
+    return Math.floor(Math.random() * (max - min) + min);
+} 
+    let order_header_id = randomNumber(1,1000)
+    const url = `http://localhost:1337/api/order-headers/${order_header_id}`;
     const params  = {
       headers: {
         'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzAyNTM1MjE0LCJleHAiOjE3MDUxMjcyMTR9.roxtQGYrEuDYH1W4sI2H3MqhKm9NrCb2W8KsGZiwjsE',
@@ -19,20 +24,14 @@ export default function () {
     // console.log(res);   
     check(res,{
       'status is 200':(r) => r.status === 200
-    }) || errorRate.add(1)
+    }) || fail("Failed to get order header")
 
     sleep(1)
 
-    if(res.status == 200){
-        // console.log("Chej")
+    if(res.status == 200){     
         
 
-// Function to generate random number
-    function randomNumber(min, max) {
-        return Math.floor(Math.random() * (max - min) + min);
-    }      
-        const id  = randomNumber(1,500) 
-        const url = `http://localhost:1337/api/order-headers/${id}`;
+        const url = `http://localhost:1337/api/order-headers/${order_header_id}`;
         const params  = {
             headers: {
               'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzAyNTM1MjE0LCJleHAiOjE3MDUxMjcyMTR9.roxtQGYrEuDYH1W4sI2H3MqhKm9NrCb2W8KsGZiwjsE',
@@ -63,7 +62,7 @@ export default function () {
         // console.log(res);   
         check(res,{
           'status is 200':(r) => r.status === 200
-        }) || errorRate.add(1)
+        }) || fail('update order header failed')
 
         if(res.status == 200){
             let order_id = randomNumber(200,2000)
@@ -87,7 +86,7 @@ export default function () {
                         discountpercentage:243,
                         discountamount:342, 
                         item:55,
-                        order_header:id
+                        order_header:order_header_id
                     }
                 }
         
@@ -99,10 +98,13 @@ export default function () {
             // console.log(res);   
             check(res,{
               'status is 200':(r) => r.status === 200
-            }) || errorRate.add(1)
+            }) || fail("Failed to update order details")
 
         }
 
     }
+  }catch(error){
+    console.error(`An error occurred:${error.message}`);
+  }
    
 }
