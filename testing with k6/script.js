@@ -171,6 +171,9 @@ export function orderswithordersdetailsandcustomer(){
 
 export function postorderheaderandorderdetails(){
   try{
+    function randomNumber(min, max) {
+      return Math.floor(Math.random() * (max - min) + min);
+  } 
     const url = 'http://localhost:1337/api/order-headers';
     const params  = {
       headers: {
@@ -191,7 +194,7 @@ export function postorderheaderandorderdetails(){
                 advancepaid:456,
                 balancedue: 234,
                 orderno: 'customer1001',
-                customer: 3
+                customer: randomNumber(1,10000)
             }
         }
 
