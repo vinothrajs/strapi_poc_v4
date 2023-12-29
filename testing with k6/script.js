@@ -98,7 +98,7 @@ export function allOrdersheaderswithPagination(){
     try {
       
     
-    const url = 'http://localhost:1337/api/order-headers?pagination[page]=1&pagination[pageSize]=2'
+    const url = 'http://localhost:1337/api/order-headers?pagination[page]=1&pagination[pageSize]=25'
     const params  = {
       headers: {
         'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzAyNTM1MjE0LCJleHAiOjE3MDUxMjcyMTR9.roxtQGYrEuDYH1W4sI2H3MqhKm9NrCb2W8KsGZiwjsE',
@@ -170,10 +170,8 @@ export function orderswithordersdetailsandcustomer(){
 
 
 export function postorderheaderandorderdetails(){
-  try {
-    
- 
-  const url = 'http://localhost:1337/api/order-headers';
+  try{
+    const url = 'http://localhost:1337/api/order-headers';
     const params  = {
       headers: {
         'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzAyNTM1MjE0LCJleHAiOjE3MDUxMjcyMTR9.roxtQGYrEuDYH1W4sI2H3MqhKm9NrCb2W8KsGZiwjsE',
@@ -201,7 +199,12 @@ export function postorderheaderandorderdetails(){
     )
 
     const res = http.post(url,payload,params);
-    // console.log("res:",res.status);   
+    //  console.log("res:",res.body);
+     let order_headers = res.body 
+    //  console.log(typeof(order_headers)); 
+     let obj = JSON.parse(order_headers)
+     const idValue = obj.data.id;
+     
     check(res,{
       'status is 200':(r) => r.status === 200,
       
@@ -230,25 +233,25 @@ export function postorderheaderandorderdetails(){
             discountpercentage: 23,
             discountamount:32,
             item:55,
-            order_header: 1001
+            order_header: idValue
         }
        })
 
        const res = http.post(url,payload,params);
-    //    console.log("res:",res.status);   
+    //  console.log("res:",res);   
      const checkoutput =  check(res,{
          'status is 200':(r) => r.status === 200,
          
        }) || errorRate.add(1)
 
        if(!checkoutput){
-        fail('unexpected response')
+        fail('Failed to create order details')
        }
 
        sleep(1)
-
     }
-  } catch (error) {
+
+  }catch(error){
     console.error(`An error occurred:${error.message}`);
   }
 

@@ -9,7 +9,7 @@ export const options = {
 export const errorRate = new Rate('errors')
 export default function () {
    try{
-    const url = 'http://localhost:1337/api/order-headers?pagination[page]=1&pagination[pageSize]=2'
+    const url = 'http://localhost:1337/api/order-headers?pagination[page]=1&pagination[pageSize]=25'
     const params  = {
       headers: {
         'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzAyNTM1MjE0LCJleHAiOjE3MDUxMjcyMTR9.roxtQGYrEuDYH1W4sI2H3MqhKm9NrCb2W8KsGZiwjsE',

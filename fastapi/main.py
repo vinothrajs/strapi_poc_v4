@@ -18,13 +18,16 @@ async def items():
 
 @app.get("/orderheaderwithdetails")
 async def orderheaderwithorderdetails():
-    url = 'http://localhost:1337/api/order-headers/1?populate[0]=order_details'   
+    start_range = 100
+    end_range = 1000     
+    order_header_id = random.randint(start_range,end_range) 
+    url = f'http://localhost:1337/api/order-headers/{order_header_id}?populate[0]=order_details'   
     response = requests.get(url,headers=headers)
     return response.json()
         
 @app.get("/orderhearderwithpagination") 
 async def orderheaderwithpagination():
-    url = "http://localhost:1337/api/order-headers?pagination[page]=1&pagination[pageSize]=2"       
+    url = "http://localhost:1337/api/order-headers?pagination[page]=1&pagination[pageSize]=25"       
    
     response = requests.get(url,headers=headers)
     return response.json()
@@ -39,6 +42,7 @@ async def orderwithorderdetailsandcustomer():
 @app.post("/postorderheaderandorderdetails")
 async def postorderheaderandorderdetails():
     url = "http://localhost:1337/api/order-headers"
+    customer_id = random.randint(1,10000)  
     payload = json.dumps(
         {
             'data':{
@@ -52,7 +56,7 @@ async def postorderheaderandorderdetails():
                 'advancepaid':456,
                 'balancedue': 234,
                 'orderno': 'customer1435t01',
-                'customer': 4
+                'customer': customer_id
             }
         }
     )   
@@ -97,7 +101,7 @@ async def updateorderheaderandorderdetail():
     #  return response.json()
      if response.status_code  == 200:
         print(order_header_id) 
-        customer_id = random.randint(1,100)    
+        customer_id = random.randint(1,10000)    
         url = f"http://localhost:1337/api/order-headers/{order_header_id}"
         payload = json.dumps(
             {
@@ -145,7 +149,7 @@ async def deleteorders():
      start_range = 100
      end_range = 1000     
      order_header_id = random.randint(start_range,end_range) 
-     url = f"http://localhost:1337/api/deleteorders/1781"
+     url = f"http://localhost:1337/api/deleteorders/{order_header_id}"
      response = requests.delete(url,headers=headers)
     #  print(response.json())
      return response.json()
