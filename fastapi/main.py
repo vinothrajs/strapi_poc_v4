@@ -42,7 +42,7 @@ async def orderwithorderdetailsandcustomer():
 @app.post("/postorderheaderandorderdetails")
 async def postorderheaderandorderdetails():
     url = "http://localhost:1337/api/order-headers"
-    customer_id = random.randint(1,10000)  
+    customer_id = random.randint(1,100)  
     payload = json.dumps(
         {
             'data':{
@@ -61,12 +61,67 @@ async def postorderheaderandorderdetails():
         }
     )   
     response = requests.post(url,data=payload,headers=headers)
-    # print(response.status_code)
+    # print(response)
+    if response.status_code == 200:       
+        res = response.json()
+        order_header_id = res['data']['id']        
+        print("orderdetails started for : ",order_header_id)
+        url = 'http://localhost:1337/api/order-details' 
+        item_id = random.randint(1,100)         
+        payload = json.dumps(
+            {
+               'data':{
+                    'orderlinenumber':21,
+                    'orderquantity':30,
+                    'unitprice':23,
+                    'duedate':"2023-11-29",
+                    'extendedamount': 45,
+                    'taxamount':63,
+                    'linetotalamount':45,
+                    'discountpercentage': 23,
+                    'discountamount':32,
+                    'item':item_id,
+                    'order_header': order_header_id
+                }
+            }
+        )
+        for i in range(1,101):
+            # print(i)                    
+            response = requests.post(url,data=payload,headers=headers)  
+            print("response : ",response)          
+        return response.json()
+        
+        
+@app.post("/postoneorderheaderandorderdetails")
+async def oneorderheaderandorderdetail():
+    url = "http://localhost:1337/api/order-headers"
+    customer_id = random.randint(1,100)  
+    payload = json.dumps(
+        {
+            'data':{
+                'orderdate': "2023-11-24",
+                'orderduedate': "2023-11-29",
+                'subtotal':22,
+                'discount':23,
+                'tax':33,
+                'shipping': 25,
+                'ordertotal':32,
+                'advancepaid':456,
+                'balancedue': 234,
+                'orderno': 'customer1435t01',
+                'customer': customer_id
+            }
+        }
+    )   
+    response = requests.post(url,data=payload,headers=headers)
+    print(response.status_code)
     if response.status_code == 200:
+    
         # print(response.json())
         print("headers :",headers)
         res = response.json()
         order_header_id = res['data']['id']
+        print("orderdetails started for : ",order_header_id)
         url = 'http://localhost:1337/api/order-details'
         payload = json.dumps(
             {
@@ -86,9 +141,9 @@ async def postorderheaderandorderdetails():
             }
         )
         
-        response = requests.post(url,data=payload,headers=headers)            
+        response = requests.post(url,data=payload,headers=headers)
+        print(response)            
         return response.json()
- 
     
 @app.put("/updateorderheaderandorderdetail")
 async def updateorderheaderandorderdetail():
@@ -156,6 +211,61 @@ async def deleteorders():
      
   
  
+
     
+@app.post("/postorderheadersandorderdetails")
+async def postorderheadersandorderdetails():
+    for i in range(100):
+        print("-----------")
+        print("H: ", i)
+        url = "http://localhost:1337/api/order-headers"
+        customer_id = random.randint(1,100)  
+        payload = json.dumps(
+            {
+                'data':{
+                    'orderdate': "2023-11-24",
+                    'orderduedate': "2023-11-29",
+                    'subtotal':22,
+                    'discount':23,
+                    'tax':33,
+                    'shipping': 25,
+                    'ordertotal':32,
+                    'advancepaid':456,
+                    'balancedue': 234,
+                    'orderno': 'customer1435t01',
+                    'customer': customer_id
+                }
+            }
+        )
+        response = requests.post(url,data=payload,headers=headers)
+        if response.status_code == 200:
+                res = response.json()
+                order_header_id = res['data']['id']
+                url = 'http://localhost:1337/api/order-details'
+                payload = json.dumps(
+                    {
+                    'data':{
+                            'orderlinenumber':21,
+                            'orderquantity':123,
+                            'unitprice':23,
+                            'duedate':"2023-11-29",
+                            'extendedamount': 45,
+                            'taxamount':63,
+                            'linetotalamount':45,
+                            'discountpercentage': 23,
+                            'discountamount':32,
+                            'item':55,
+                            'order_header': order_header_id
+                        }
+                    }
+                )
+                for i in range(100):
+                    print("D: ", i)
+                    print("order_header_id: ", order_header_id)
+                    response = requests.post(url,data=payload,headers=headers)            
+    return response.json()
+     
+    
+            
 
 

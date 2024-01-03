@@ -2,14 +2,14 @@ import http from 'k6/http';
 import { check,fail,sleep } from 'k6';
 // import { Rate } from 'k6/metrics';
 export const options = {
-  vus: 1,
-  duration: '10s',
+  vus: 10,
+  duration: '5s',
 };
 
 // export const errorRate = new Rate('errors')
 export default function () {
     try {
-    const url = 'http://localhost:8000/postorderheaderandorderdetails';   
+    const url = 'http://localhost:8000/postorderheadersandorderdetails';   
     check(http.post(url),{
       'status is 200':(r) => r.status == 200,
     
